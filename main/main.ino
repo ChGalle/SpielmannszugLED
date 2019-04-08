@@ -1,3 +1,8 @@
+/*
+ * BetriebsSoftware für die LED-Lichtbänder im Vereinsheim des Spielmannszug Büch e.V.
+ * Verbaut ist derzeit ein Arduino Mega 2560, so wie zwei Strips á 420 Leds
+ */
+
 #include <FastLED.h>
 
 #define NUM_STRIPS 2  //Anzahl der Strips
