@@ -1,6 +1,9 @@
 /*
  * BetriebsSoftware für die LED-Lichtbänder im Vereinsheim des Spielmannszug Büch e.V.
  * Verbaut ist derzeit ein Arduino Mega 2560, so wie zwei Strips á 420 Leds
+ * Autor: Edward Hamann // Christoph Galle
+ * Datum: 22.05.2019
+ *
  */
 
 #include <FastLED.h>
@@ -26,49 +29,94 @@ void setup() {
   //Setze die Gesamthelligkeit
   FastLED.setBrightness( BRIGHTNESS );
 
+  def_bereiche();
+
 }
 
-void animation_rot_weiss() {
+void def_bereiche() {
+//Array Grün: 0-70,141-210,211-280,351-420,421-490,561-630,631-700,771-840
+//Array Weiß: 71-140,281-350,491-560,701-770,
+int bereiche_green[15]; //Array für die grünen Abschnitte
+int bereiche_white[7]; //Array für die weißen Abschnitte
 
-  //Einblenden von Rot und Weiß, Pixel für Pixel
-  for (int i = 0; i < 207; i++) {
-    // Setze die LED auf Rot
-    leds[i] = CRGB::Red;
-    FastLED.show();
+int b_green_anz = 15; //Zähler für Schleifen
+int b_white_anz = 7; // ""
+
+// Bereiche definieren
+ bereiche_green[0] = 0;
+ bereiche_green[1] = 70;
+ bereiche_green[2] = 141;
+ bereiche_green[3] = 210;
+ bereiche_green[4] = 211;
+ bereiche_green[5] = 280;
+ bereiche_green[6] = 351;   
+ bereiche_green[7] = 420;
+ bereiche_green[8] = 421;
+ bereiche_green[9] = 490;
+ bereiche_green[10] = 561;
+ bereiche_green[11] = 630;
+ bereiche_green[12] = 631;
+ bereiche_green[13] = 700;
+ bereiche_green[14] = 771; 
+ bereiche_green[15] = 840;
+
+ bereiche_white[0] = 71;
+ bereiche_white[1] = 140;
+ bereiche_white[2] = 281;
+ bereiche_white[3] = 350;
+ bereiche_white[4] = 491;
+ bereiche_white[5] = 560;
+ bereiche_white[6] = 701;
+ bereiche_white[7] = 770;
+
+}
+
+void fill_green() {
+
+int x = 0 //zähler für Array und Schleife definieren
+
+while (x <= b_green_anz){ //gesamtes Array durchklaufen
+
+//setzen der LEDs im Array grün
+  for (int i = bereiche_green[x]; i <= bereiche_green[x+1]; i++) {
+
+    leds[i] = CRGB( 0, 153, 51);
+
   }
-  for (int i = 207; i < 414; i++) {
-    // Setze die LED auf Weiß
+
+x=x+2; //Zähler um 2 erhöhen damit nächster Bereich durchlaufen wird
+
+}
+
+}
+
+void fill_white() {
+
+int x = 0 //zähler für Array und Schleife definieren
+
+while (x <= b_white_anz){ //gesamtes Array durchklaufen
+
+//setzen der LEDs im Array weiß
+  for (int i = bereiche_white[x]; i <= bereiche_white[x+1]; i++) {
+
     leds[i] = CRGB( 108, 108, 60);
-    FastLED.show();
+
   }
-  for (int i = 414; i < 621; i++) {
-    // Setze die LED auf Weiß
-    leds[i] = CRGB( 108, 108, 60);
-    FastLED.show();
-  }
-  for (int i = 621; i < 840; i++) {
-    // Setze die LED auf Rot
-    leds[i] = CRGB::Red;
-    FastLED.show();
-  }
+
+x=x+2; //Zähler um 2 erhöhen damit nächster Bereich durchlaufen wird
+
 }
 
-void warm_weiss() {
-
-  //Einblenden von Warm Weiß, Pixel für Pixel, in rückwärtiger Richtung
-  for (int i = 840; i >= 0; i--) {
-    // Setze die LED auf Warm Weiß
-    leds[i] = CRGB( 70, 50, 15);
-    FastLED.show();
-  }
 }
+
 
 void loop() {
-  //Zeige Animation Rot-Weiß für 10 Sekunden
-  animation_rot_weiss();
-  delay(10000);
-  //Zeige Warm Weiß für 10 Minuten
-  warm_weiss();
-  delay(600000);
+  //Zeige die Farben an und bleibe in einer Schleife hängen
+  def_bereiche();
+  fill_white();
+  fill_green();
+  while (1=1){
+    //never ending delay
+  }
 
 }
